@@ -1,0 +1,13 @@
+% This file managed by Puppet <%= puppetversion %>
+% Template Path: <%= module_name %>/templates/rabbitmq.config
+[
+  {rabbit, [
+    {cluster_nodes, [
+        <% cluster_nodes.each do |node| -%>
+          'rabbit@<%= node['hostname'] -%>'<%= if cluster_nodes.last != node then "," end -%>
+        <% end -%>
+      ]
+    }
+  ]}
+].
+% EOF
