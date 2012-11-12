@@ -4,7 +4,8 @@
 # manifest because all the power of ruby can be used.
 
 hostclass :"rabbitmqcluster::cluster", :arguments => {
-    "cluster_nodes" => nil
+    "cluster_nodes" => nil,
+    "management" => false
   } do
 
   # render the cluster config with the disk nodes.
@@ -36,6 +37,11 @@ hostclass :"rabbitmqcluster::cluster", :arguments => {
       :mode => '0400',
       :owner => 'rabbitmq',
       :group => 'rabbitmq'
+
+    # install management plugin if needed
+    if scope.lookupvar('management')
+        include 'rabbitmqcluster::management'
+    end
 
     # kick lvs so new servers will be added to the load balancer pool immediately.
     create_resource :notify, "kick -> lvs"
