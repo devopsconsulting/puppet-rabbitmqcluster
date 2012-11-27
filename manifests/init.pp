@@ -6,13 +6,9 @@ class rabbitmqcluster($cluster_nodes, $management=false) {
     # there are no server in it's config to cluster with. If what we needed was
     # a ramnode that is problematic because converting a disk node into a ram node is
     # not trivial.
-    include disablestart
+    class {"disablestart":} ->
     class {"rabbitmqcluster::cluster":
         cluster_nodes => $cluster_nodes,
         management => $management,
     }
-    
-    # always create resource rabbitmqcluster::disablestart before 
-    # rabbitmqcluster::cluster
-    Class["disablestart"] -> Class["rabbitmqcluster::cluster"]
 }
